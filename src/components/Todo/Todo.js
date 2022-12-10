@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import {FaEdit} from 'react-icons/fa'
 import {MdDelete} from 'react-icons/md'
+import EditModal from "../EditModal/EditModal";
 
 const Todo = () => {
 
-   
+   const [isEditing, setEditing] = useState(null)
     const {data: items =[], refetch} =useQuery({
         queryKey: ['items'],
         queryFn: async ()=>{
@@ -38,10 +39,12 @@ const Todo = () => {
                 toast.success('Item Added Successfull')
                 refetch()
             }
-            form.reset();
+            form.reset(items);
         })
 
     }
+    
+    
 
     const handleDelete = _id => {
 
@@ -64,6 +67,7 @@ const Todo = () => {
     }
     
 
+
   return (
     <div className=" flex justify-center items-center bg-gray-600">
       <div className=" bg-white p-5 my-20 lg:w-1/2 container mx-auto">
@@ -73,12 +77,14 @@ const Todo = () => {
           <input
             type="text"
             name="name"
-            placeholder="Add Item"
+        placeholder= 'add item'
+        
             className="input border-gray-500 focus:outline-0 w-full font-inter"
           />
-          <input type="submit" className="px-6 text-white font-inter text-3xl 
-           cursor-pointer bg-primary top-0 bottom-0 right-0 absolute" value="+" />
+          <button className="font-inter text-lg btn btn-secondary 
+          top-0 bottom-0 right-0 absolute" > Add </button>
           </label>
+    
         </form>
         <div className="overflow-x-auto">
   <table className="table w-full">
@@ -93,11 +99,17 @@ const Todo = () => {
     <tbody>
       
      {
-        items.map((item, i)=>  <tr key={item._id}>
+        items.map((item, i)=>  <tr 
+           key={item._id}
+           >
             <th>{i+1} </th>
             <td> {item.name} </td>
-            <td> <button> <FaEdit size={20} ></FaEdit> </button> </td>
-            <td> <button onClick={()=>handleDelete(item._id)}  className="" > <MdDelete 
+           <td> <label onClick={()=>setEditing(item)}
+             htmlFor="edit-modal" className="cursor-pointer">
+           <FaEdit size={20} />
+          </label></td>
+            <td> <button onClick={()=>handleDelete(item._id , )}  className="" > 
+             <MdDelete 
              size={20} /> </button> </td>
           </tr>)
      }
@@ -107,6 +119,14 @@ const Todo = () => {
   </table>
 </div>
       </div>
+     {
+        isEditing &&
+        <EditModal
+        isEditing ={isEditing}
+        refetch = {refetch}
+        setEditing = {setEditing}
+        ></EditModal>
+     }
     </div>
   );
 };
