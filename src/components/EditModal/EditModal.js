@@ -12,7 +12,7 @@ const EditModal = ({isEditing, refetch, setEditing}) => {
        
        
 
-        fetch(`http://localhost:5000/items/${_id}`,{
+        fetch(`https://todo-server-nu.vercel.app/items/${_id}`,{
             method: 'PUT',
             headers: {
                 'content-type': 'application/json'
@@ -51,7 +51,7 @@ const EditModal = ({isEditing, refetch, setEditing}) => {
             className="input border-gray-500 focus:outline-0 w-full font-inter"
           />
           <button 
-          className="font-inter text-lg btn btn-secondary 
+          className="font-inter text-lg text-white px-6 bg-orange-600
           top-0 bottom-0 right-0 absolute" >Edit</button>
           </label>
           </form>

@@ -11,7 +11,7 @@ const Todo = () => {
     const {data: items =[], refetch} =useQuery({
         queryKey: ['items'],
         queryFn: async ()=>{
-            const res = await fetch('http://localhost:5000/items')
+            const res = await fetch('https://todo-server-nu.vercel.app/items')
             const data = await res.json()
             return data
         }
@@ -25,7 +25,7 @@ const Todo = () => {
             name: event.target.name.value,
         }
         
-        fetch('http://localhost:5000/items',{
+        fetch('https://todo-server-nu.vercel.app/items',{
             method:'POST',
             headers: {
                 'content-type': 'application/json'
@@ -52,7 +52,7 @@ const Todo = () => {
 
        if(confirm){
 
-        fetch(`http://localhost:5000/items/${_id}`, {
+        fetch(`https://todo-server-nu.vercel.app/items/${_id}`, {
             method: 'DELETE',
         })
         .then( res => res.json())
@@ -69,19 +69,19 @@ const Todo = () => {
 
 
   return (
-    <div className=" flex justify-center items-center bg-gray-600">
-      <div className=" bg-white p-5 my-20 lg:w-1/2 container mx-auto">
+    <div className=" flex justify-center items-center bg-gray-300">
+      <div className=" bg-white p-5 my-20 lg:w-1/2 container mx-auto shadow-xl rounded">
         <h2 className="text-4xl text-center font-inter font-bold mb-10" >Todo-App</h2>
-        <form onSubmit={handleAdd} className="w-full mb-10" >
+        <form onSubmit={handleAdd} className="w-full mb-10 font-inter " >
           <label className="flex relative " >
           <input
             type="text"
             name="name"
-        placeholder= 'add item'
+        placeholder= 'Add item'
         
             className="input border-gray-500 focus:outline-0 w-full font-inter"
           />
-          <button className="font-inter text-lg btn btn-secondary 
+          <button className="px-6 bg-orange-600 text-white text-lg
           top-0 bottom-0 right-0 absolute" > Add </button>
           </label>
     
