@@ -1,8 +1,21 @@
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import { toast } from "react-hot-toast";
 import {FaEdit} from 'react-icons/fa'
 import {MdDelete} from 'react-icons/md'
 
 const Todo = () => {
+
+   
+    const {data: items =[]} =useQuery({
+        queryKey: ['items'],
+        queryFn: async ()=>{
+            const res = await fetch('http://localhost:5000/items')
+            const data = await res.json()
+            return data
+        }
+    })
+        
 
     const handleAdd = event =>{
         event.preventDefault();
@@ -21,8 +34,17 @@ const Todo = () => {
         .then(res => res.json())
         .then(data =>{
             console.log(data)
+            if(data.acknowledged >0){
+                toast.success('Item Added Successfull')
+            }
             form.reset();
         })
+
+    }
+
+    const handleDelete = (_id) => {
+
+        console.log(_id)
 
     }
     
@@ -55,12 +77,14 @@ const Todo = () => {
     </thead>
     <tbody>
       
-      <tr>
-        <th>1</th>
-        <td>Cy Gandde ghgmgmg lihhgjjg</td>
-        <td> <button> <FaEdit size={20} ></FaEdit> </button> </td>
-        <td> <button className="" > <MdDelete size={20} /> </button> </td>
-      </tr>
+     {
+        items.map((item, i)=>  <tr key={item._id}>
+            <th>{i+1} </th>
+            <td> {item.name} </td>
+            <td> <button> <FaEdit size={20} ></FaEdit> </button> </td>
+            <td> <button onClick={()=>handleDelete(item._id)}  className="" > <MdDelete size={20} /> </button> </td>
+          </tr>)
+     }
      
       
     </tbody>
