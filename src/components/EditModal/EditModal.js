@@ -3,15 +3,14 @@ import { toast } from "react-hot-toast";
 
 const EditModal = ({isEditing, refetch, setEditing}) => {
     const {name, _id} = isEditing;
+
+    //Item edit function
     const handleEdit = (event) =>{
         event.preventDefault()
-        const form = event.target;
        const items = {
         name: event.target.name.value,
        }
        
-       
-
         fetch(`https://todo-server-nu.vercel.app/items/${_id}`,{
             method: 'PUT',
             headers: {
