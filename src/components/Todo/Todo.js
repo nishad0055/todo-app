@@ -7,7 +7,7 @@ import {MdDelete} from 'react-icons/md'
 const Todo = () => {
 
    
-    const {data: items =[]} =useQuery({
+    const {data: items =[], refetch} =useQuery({
         queryKey: ['items'],
         queryFn: async ()=>{
             const res = await fetch('http://localhost:5000/items')
@@ -36,16 +36,31 @@ const Todo = () => {
             console.log(data)
             if(data.acknowledged >0){
                 toast.success('Item Added Successfull')
+                refetch()
             }
             form.reset();
         })
 
     }
 
-    const handleDelete = (_id) => {
+    const handleDelete = _id => {
 
-        console.log(_id)
+       const confirm = window.confirm('Are You Confirm Delete')
 
+       if(confirm){
+
+        fetch(`http://localhost:5000/items/${_id}`, {
+            method: 'DELETE',
+        })
+        .then( res => res.json())
+        .then(data =>{
+            if(data.deletedCount > 0){
+                toast.success('Item Deleted Successfull')
+                refetch()
+            }
+            
+        })
+       }
     }
     
 
@@ -82,7 +97,8 @@ const Todo = () => {
             <th>{i+1} </th>
             <td> {item.name} </td>
             <td> <button> <FaEdit size={20} ></FaEdit> </button> </td>
-            <td> <button onClick={()=>handleDelete(item._id)}  className="" > <MdDelete size={20} /> </button> </td>
+            <td> <button onClick={()=>handleDelete(item._id)}  className="" > <MdDelete 
+             size={20} /> </button> </td>
           </tr>)
      }
      
